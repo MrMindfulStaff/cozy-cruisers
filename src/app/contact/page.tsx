@@ -1,7 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import type { Metadata } from "next";
+import {
+  FloatingShapes,
+  WaveDivider,
+  DotPattern,
+  BlobAccent,
+} from "@/components/Decorative";
 
 // Note: metadata must be in a separate file for client components,
 // but for simplicity we'll handle SEO via the layout title template
@@ -12,8 +17,10 @@ export default function ContactPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-navy text-white py-16 md:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="bg-navy text-white py-16 md:py-24 relative overflow-hidden">
+        <div className="absolute inset-0 hero-mesh" />
+        <FloatingShapes />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6">
               Let&apos;s Get{" "}
@@ -25,11 +32,15 @@ export default function ContactPage() {
             </p>
           </div>
         </div>
+        <WaveDivider color="#FAF7F2" />
       </section>
 
       {/* Form Section */}
-      <section className="bg-cream py-16 md:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="bg-cream py-16 md:py-24 relative overflow-hidden">
+        <DotPattern />
+        <BlobAccent position="top-right" color="teal" size="lg" />
+        <BlobAccent position="bottom-left" color="orange" size="md" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto">
             {/* Toggle */}
             <div className="flex bg-white rounded-full p-1 shadow-sm mb-10 max-w-md mx-auto">
@@ -37,7 +48,7 @@ export default function ContactPage() {
                 onClick={() => setFormType("family")}
                 className={`flex-1 py-3 px-6 rounded-full font-heading font-bold text-sm transition-colors ${
                   formType === "family"
-                    ? "bg-orange text-white"
+                    ? "bg-orange text-white shadow-md"
                     : "text-dark/60 hover:text-dark"
                 }`}
               >
@@ -47,7 +58,7 @@ export default function ContactPage() {
                 onClick={() => setFormType("facility")}
                 className={`flex-1 py-3 px-6 rounded-full font-heading font-bold text-sm transition-colors ${
                   formType === "facility"
-                    ? "bg-orange text-white"
+                    ? "bg-orange text-white shadow-md"
                     : "text-dark/60 hover:text-dark"
                 }`}
               >
@@ -60,8 +71,9 @@ export default function ContactPage() {
               name={formType === "family" ? "family-inquiry" : "facility-inquiry"}
               method="POST"
               data-netlify="true"
-              className="bg-white rounded-2xl p-8 md:p-10 shadow-sm"
+              className="bg-white rounded-2xl p-8 md:p-10 shadow-sm relative overflow-hidden"
             >
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-teal via-orange to-teal" />
               <input
                 type="hidden"
                 name="form-name"
@@ -250,7 +262,7 @@ export default function ContactPage() {
 
                 <button
                   type="submit"
-                  className="w-full bg-orange text-white py-4 rounded-full font-heading font-bold text-lg hover:bg-orange/90 transition-colors"
+                  className="w-full bg-orange text-white py-4 rounded-full font-heading font-bold text-lg hover:bg-orange/90 transition-all hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
                 >
                   {formType === "family" ? "Submit Family Inquiry" : "Submit Partnership Inquiry"}
                 </button>
@@ -261,12 +273,13 @@ export default function ContactPage() {
       </section>
 
       {/* Contact Info */}
-      <section className="bg-white py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="bg-white py-16 md:py-20 relative overflow-hidden">
+        <BlobAccent position="center-right" color="teal" size="md" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto text-center">
-            <div>
-              <div className="w-12 h-12 bg-teal/10 text-teal rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+            <div className="card-lift bg-cream/50 rounded-2xl p-8">
+              <div className="w-14 h-14 bg-teal/10 text-teal rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
                 </svg>
               </div>
@@ -275,9 +288,9 @@ export default function ContactPage() {
                 (414) 262-9127
               </a>
             </div>
-            <div>
-              <div className="w-12 h-12 bg-teal/10 text-teal rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+            <div className="card-lift bg-cream/50 rounded-2xl p-8">
+              <div className="w-14 h-14 bg-teal/10 text-teal rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
                 </svg>
               </div>
@@ -286,9 +299,9 @@ export default function ContactPage() {
                 info@cozycruisers.com
               </a>
             </div>
-            <div>
-              <div className="w-12 h-12 bg-teal/10 text-teal rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+            <div className="card-lift bg-cream/50 rounded-2xl p-8">
+              <div className="w-14 h-14 bg-teal/10 text-teal rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
                 </svg>
               </div>
@@ -300,8 +313,10 @@ export default function ContactPage() {
       </section>
 
       {/* Service Area Note */}
-      <section className="bg-navy py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="bg-navy py-12 relative overflow-hidden">
+        <FloatingShapes />
+        <div className="absolute inset-0 hero-mesh" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-white/80 font-body text-lg">
             Currently serving the <span className="text-orange font-bold">Milwaukee metro area</span>.
             Routes are planned within DCF-compliant time limits to ensure every child&apos;s comfort and safety.

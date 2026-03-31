@@ -1,5 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
+import {
+  WaveDivider,
+  WaveDividerAlt,
+  FloatingShapes,
+  DotPattern,
+  BlobAccent,
+} from "@/components/Decorative";
 
 function ShieldIcon() {
   return (
@@ -38,7 +45,8 @@ export default function Home() {
     <>
       {/* Hero Section */}
       <section className="bg-navy text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-navy via-navy to-navy/80" />
+        <div className="absolute inset-0 hero-mesh" />
+        <FloatingShapes />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="animate-fade-in-up">
@@ -54,7 +62,7 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
                   href="/contact"
-                  className="bg-orange text-white px-8 py-4 rounded-full font-heading font-bold text-lg text-center hover:bg-orange/90 transition-colors shadow-lg"
+                  className="bg-orange text-white px-8 py-4 rounded-full font-heading font-bold text-lg text-center hover:bg-orange/90 transition-colors shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
                 >
                   Get Started
                 </Link>
@@ -67,17 +75,21 @@ export default function Home() {
               </div>
             </div>
             <div className="flex justify-center animate-fade-in-up-delay">
-              <Image
-                src="/logo.webp"
-                alt="Cozy Cruisers — Safe and Fun Rides"
-                width={400}
-                height={400}
-                className="rounded-full shadow-2xl"
-                preload
-              />
+              <div className="relative">
+                <div className="absolute -inset-4 bg-teal/20 rounded-full blur-2xl animate-pulse-soft" />
+                <Image
+                  src="/logo.webp"
+                  alt="Cozy Cruisers — Safe and Fun Rides"
+                  width={400}
+                  height={400}
+                  className="rounded-full shadow-2xl relative"
+                  preload
+                />
+              </div>
             </div>
           </div>
         </div>
+        <WaveDivider color="#FFFFFF" />
       </section>
 
       {/* Trust Bar */}
@@ -104,8 +116,11 @@ export default function Home() {
       </section>
 
       {/* Why Cozy Cruisers */}
-      <section className="bg-cream py-16 md:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="bg-cream py-16 md:py-24 relative overflow-hidden">
+        <DotPattern />
+        <BlobAccent position="top-right" color="teal" size="lg" />
+        <BlobAccent position="bottom-left" color="orange" size="md" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 md:mb-16">
             <h2 className="font-heading text-3xl md:text-4xl font-extrabold text-navy mb-4">
               Why Cozy Cruisers?
@@ -121,28 +136,34 @@ export default function Home() {
                 icon: <ShieldIcon />,
                 title: "Certified & Compliant",
                 desc: "DCF 250, 251, and 202 compliant. Every regulation met, every standard exceeded.",
+                accent: "teal",
               },
               {
                 icon: <BusIcon />,
                 title: "Scheduled & Reliable",
                 desc: "Consistent daily routes. AM pickup, PM drop-off. Your child's ride is never in question.",
+                accent: "orange",
               },
               {
                 icon: <HeartIcon />,
                 title: "Community-Rooted",
                 desc: "We're not an app. We're your community. Built in Milwaukee, for Milwaukee families.",
+                accent: "teal",
               },
               {
                 icon: <ChecklistIcon />,
                 title: "Zero Left Behind",
                 desc: "Post-trip child check protocol on every single route. Child safety alarm systems on every vehicle.",
+                accent: "orange",
               },
             ].map((item) => (
               <div
                 key={item.title}
-                className="bg-white rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-md transition-shadow"
+                className="bg-white rounded-2xl p-6 md:p-8 shadow-sm card-lift gradient-top overflow-hidden"
               >
-                <div className="mb-4">{item.icon}</div>
+                <div className={`w-14 h-14 ${item.accent === "teal" ? "bg-teal/10" : "bg-orange/10"} rounded-xl flex items-center justify-center mb-5`}>
+                  {item.icon}
+                </div>
                 <h3 className="font-heading font-bold text-navy text-lg mb-2">{item.title}</h3>
                 <p className="text-dark/70 text-sm leading-relaxed font-body">{item.desc}</p>
               </div>
@@ -151,9 +172,12 @@ export default function Home() {
         </div>
       </section>
 
+      <WaveDividerAlt color="#FFFFFF" />
+
       {/* How It Works */}
-      <section className="bg-white py-16 md:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="bg-white py-16 md:py-24 relative overflow-hidden">
+        <BlobAccent position="center-right" color="teal" size="lg" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 md:mb-16">
             <h2 className="font-heading text-3xl md:text-4xl font-extrabold text-navy mb-4">
               How It Works
@@ -163,7 +187,9 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 md:gap-12">
+          <div className="grid md:grid-cols-3 gap-8 md:gap-12 relative">
+            {/* Connector line (desktop) */}
+            <div className="hidden md:block absolute top-8 left-[20%] right-[20%] h-0.5 bg-gradient-to-r from-orange via-teal to-orange opacity-20" />
             {[
               {
                 step: "1",
@@ -181,8 +207,8 @@ export default function Home() {
                 desc: "Your child rides with a trained, background-checked driver in a certified, inspected vehicle. Every single day.",
               },
             ].map((item) => (
-              <div key={item.step} className="text-center">
-                <div className="w-16 h-16 bg-orange text-white rounded-full flex items-center justify-center text-2xl font-heading font-extrabold mx-auto mb-6">
+              <div key={item.step} className="text-center relative">
+                <div className="w-16 h-16 bg-gradient-to-br from-orange to-orange/80 text-white rounded-full flex items-center justify-center text-2xl font-heading font-extrabold mx-auto mb-6 shadow-lg relative z-10">
                   {item.step}
                 </div>
                 <h3 className="font-heading font-bold text-navy text-xl mb-3">{item.title}</h3>
@@ -193,9 +219,12 @@ export default function Home() {
         </div>
       </section>
 
+      <WaveDivider color="#F4F4F4" />
+
       {/* Testimonials */}
-      <section className="bg-light-gray py-16 md:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="bg-light-gray py-16 md:py-24 relative overflow-hidden">
+        <DotPattern />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="font-heading text-3xl md:text-4xl font-extrabold text-navy mb-4">
               Trusted by Families & Facilities
@@ -216,9 +245,10 @@ export default function Home() {
                 name: "Licensed Facility Owner",
               },
             ].map((t) => (
-              <div key={t.name} className="bg-white rounded-2xl p-8 shadow-sm">
-                <div className="text-teal text-4xl font-heading mb-4">&ldquo;</div>
-                <p className="text-dark/80 italic leading-relaxed font-body mb-6">{t.quote}</p>
+              <div key={t.name} className="bg-white rounded-2xl p-8 shadow-sm card-lift relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-teal/5 rounded-bl-full" />
+                <div className="text-teal text-5xl font-heading mb-4 leading-none">&ldquo;</div>
+                <p className="text-dark/80 italic leading-relaxed font-body mb-6 relative">{t.quote}</p>
                 <p className="font-heading font-bold text-navy text-sm">&mdash; {t.name}</p>
               </div>
             ))}
@@ -227,8 +257,10 @@ export default function Home() {
       </section>
 
       {/* Dual CTA */}
-      <section className="bg-navy py-16 md:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="bg-navy py-16 md:py-24 relative overflow-hidden">
+        <FloatingShapes />
+        <div className="absolute inset-0 hero-mesh" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="font-heading text-3xl md:text-4xl font-extrabold text-white mb-4">
               Ready to Ride?
@@ -240,8 +272,13 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <Link
               href="/families"
-              className="bg-white/10 border-2 border-teal rounded-2xl p-8 text-center hover:bg-white/15 transition-colors group"
+              className="bg-white/10 border-2 border-teal rounded-2xl p-8 text-center hover:bg-white/15 transition-all group hover:-translate-y-1 backdrop-blur-sm"
             >
+              <div className="w-16 h-16 bg-teal/20 rounded-full flex items-center justify-center mx-auto mb-5">
+                <svg className="w-8 h-8 text-teal" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                </svg>
+              </div>
               <h3 className="font-heading text-2xl font-bold text-white mb-3">For Families</h3>
               <p className="text-white/70 font-body mb-6">
                 Learn how to enroll your child in safe, scheduled childcare transportation.
@@ -252,8 +289,13 @@ export default function Home() {
             </Link>
             <Link
               href="/facilities"
-              className="bg-white/10 border-2 border-teal rounded-2xl p-8 text-center hover:bg-white/15 transition-colors group"
+              className="bg-white/10 border-2 border-teal rounded-2xl p-8 text-center hover:bg-white/15 transition-all group hover:-translate-y-1 backdrop-blur-sm"
             >
+              <div className="w-16 h-16 bg-orange/20 rounded-full flex items-center justify-center mx-auto mb-5">
+                <svg className="w-8 h-8 text-orange" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z" />
+                </svg>
+              </div>
               <h3 className="font-heading text-2xl font-bold text-white mb-3">For Facilities</h3>
               <p className="text-white/70 font-body mb-6">
                 Partner with us and remove the #1 enrollment barrier for your families.
