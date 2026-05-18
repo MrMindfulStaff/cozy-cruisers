@@ -11,8 +11,95 @@ import {
 // Note: metadata must be in a separate file for client components,
 // but for simplicity we'll handle SEO via the layout title template
 
+type Audience = "family" | "facility";
+
+const inputClass =
+  "w-full border border-light-gray rounded-xl px-4 py-3 font-body text-dark focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent";
+const labelClass = "block font-heading font-semibold text-navy text-sm mb-2";
+
+function TextField({
+  id,
+  label,
+  type = "text",
+  placeholder,
+  min,
+}: {
+  id: string;
+  label: string;
+  type?: string;
+  placeholder?: string;
+  min?: string;
+}) {
+  return (
+    <div>
+      <label htmlFor={id} className={labelClass}>
+        {label} *
+      </label>
+      <input
+        type={type}
+        id={id}
+        name={id}
+        required
+        placeholder={placeholder}
+        min={min}
+        className={inputClass}
+      />
+    </div>
+  );
+}
+
+function Chooser({ onSelect }: { onSelect: (a: Audience) => void }) {
+  return (
+    <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm relative overflow-hidden">
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-teal via-orange to-teal" />
+      <h2 className="font-heading text-2xl font-extrabold text-navy mb-2 text-center">
+        How can we help?
+      </h2>
+      <p className="text-dark/60 font-body text-sm mb-8 text-center">
+        Choose the option that fits you and we&apos;ll ask a few quick questions.
+      </p>
+      <div className="grid sm:grid-cols-2 gap-6">
+        <button
+          type="button"
+          onClick={() => onSelect("family")}
+          className="group text-center border-2 border-light-gray rounded-2xl p-8 hover:border-teal hover:bg-teal/5 transition-all hover:-translate-y-1"
+        >
+          <div className="w-16 h-16 bg-teal/10 text-teal rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+            </svg>
+          </div>
+          <h3 className="font-heading text-lg font-bold text-navy mb-1">
+            I&apos;m a Family
+          </h3>
+          <p className="text-dark/60 font-body text-sm">
+            Daily transportation for my child to and from childcare.
+          </p>
+        </button>
+        <button
+          type="button"
+          onClick={() => onSelect("facility")}
+          className="group text-center border-2 border-light-gray rounded-2xl p-8 hover:border-orange hover:bg-orange/5 transition-all hover:-translate-y-1"
+        >
+          <div className="w-16 h-16 bg-orange/10 text-orange rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z" />
+            </svg>
+          </div>
+          <h3 className="font-heading text-lg font-bold text-navy mb-1">
+            I&apos;m a Facility
+          </h3>
+          <p className="text-dark/60 font-body text-sm">
+            A transportation partner for the children we serve.
+          </p>
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function ContactPage() {
-  const [formType, setFormType] = useState<"family" | "facility">("family");
+  const [audience, setAudience] = useState<Audience | null>(null);
   const [status, setStatus] = useState<
     "idle" | "submitting" | "success" | "error"
   >("idle");
@@ -20,11 +107,12 @@ export default function ContactPage() {
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!audience) return;
     setStatus("submitting");
     setErrorMsg("");
 
     const payload = Object.fromEntries(new FormData(e.currentTarget).entries());
-    payload.formType = formType;
+    payload.formType = audience;
 
     try {
       const res = await fetch("/api/contact", {
@@ -49,6 +137,8 @@ export default function ContactPage() {
     }
   }
 
+  const isFamily = audience === "family";
+
   return (
     <>
       {/* Hero */}
@@ -58,8 +148,7 @@ export default function ContactPage() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6">
-              Let&apos;s Get{" "}
-              <span className="text-orange">Started.</span>
+              Let&apos;s Get <span className="text-orange">Started.</span>
             </h1>
             <p className="text-lg text-white/80 leading-relaxed font-body">
               Whether you&apos;re a family looking for safe childcare transportation or a
@@ -92,238 +181,154 @@ export default function ContactPage() {
                   We&apos;ll reach out within 1 business day.
                 </p>
               </div>
+            ) : audience === null ? (
+              <Chooser onSelect={setAudience} />
             ) : (
               <>
-            {/* Toggle */}
-            <div className="flex bg-white rounded-full p-1 shadow-sm mb-10 max-w-md mx-auto">
-              <button
-                onClick={() => setFormType("family")}
-                className={`flex-1 py-3 px-6 rounded-full font-heading font-bold text-sm transition-colors ${
-                  formType === "family"
-                    ? "bg-orange text-white shadow-md"
-                    : "text-dark/60 hover:text-dark"
-                }`}
-              >
-                I&apos;m a Family
-              </button>
-              <button
-                onClick={() => setFormType("facility")}
-                className={`flex-1 py-3 px-6 rounded-full font-heading font-bold text-sm transition-colors ${
-                  formType === "facility"
-                    ? "bg-orange text-white shadow-md"
-                    : "text-dark/60 hover:text-dark"
-                }`}
-              >
-                I&apos;m a Facility
-              </button>
-            </div>
-
-            {/* Form */}
-            <form
-              onSubmit={handleSubmit}
-              className="bg-white rounded-2xl p-8 md:p-10 shadow-sm relative overflow-hidden"
-            >
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-teal via-orange to-teal" />
-
-              <h2 className="font-heading text-2xl font-extrabold text-navy mb-2">
-                {formType === "family" ? "Family Inquiry" : "Facility Partnership Inquiry"}
-              </h2>
-              <p className="text-dark/60 font-body text-sm mb-8">
-                {formType === "family"
-                  ? "Tell us about your transportation needs. We'll reach out within 1 business day."
-                  : "Tell us about your facility. We'll schedule a conversation to discuss partnership."}
-              </p>
-
-              <div className="space-y-6">
-                <div className="grid sm:grid-cols-2 gap-6">
-                  <div>
-                    <label
-                      htmlFor="firstName"
-                      className="block font-heading font-semibold text-navy text-sm mb-2"
-                    >
-                      First Name *
-                    </label>
-                    <input
-                      type="text"
-                      id="firstName"
-                      name="firstName"
-                      required
-                      className="w-full border border-light-gray rounded-xl px-4 py-3 font-body text-dark focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent"
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="lastName"
-                      className="block font-heading font-semibold text-navy text-sm mb-2"
-                    >
-                      Last Name *
-                    </label>
-                    <input
-                      type="text"
-                      id="lastName"
-                      name="lastName"
-                      required
-                      className="w-full border border-light-gray rounded-xl px-4 py-3 font-body text-dark focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block font-heading font-semibold text-navy text-sm mb-2"
-                  >
-                    Email Address *
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    className="w-full border border-light-gray rounded-xl px-4 py-3 font-body text-dark focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="phone"
-                    className="block font-heading font-semibold text-navy text-sm mb-2"
-                  >
-                    Phone Number
-                  </label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    className="w-full border border-light-gray rounded-xl px-4 py-3 font-body text-dark focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent"
-                  />
-                </div>
-
-                {formType === "family" ? (
-                  <>
-                    <div>
-                      <label
-                        htmlFor="childcareFacility"
-                        className="block font-heading font-semibold text-navy text-sm mb-2"
-                      >
-                        Childcare Facility Name
-                      </label>
-                      <input
-                        type="text"
-                        id="childcareFacility"
-                        name="childcareFacility"
-                        className="w-full border border-light-gray rounded-xl px-4 py-3 font-body text-dark focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent"
-                        placeholder="Where does your child attend?"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="pickupArea"
-                        className="block font-heading font-semibold text-navy text-sm mb-2"
-                      >
-                        Pickup Neighborhood / ZIP Code
-                      </label>
-                      <input
-                        type="text"
-                        id="pickupArea"
-                        name="pickupArea"
-                        className="w-full border border-light-gray rounded-xl px-4 py-3 font-body text-dark focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent"
-                        placeholder="e.g., 53206, Sherman Park"
-                      />
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div>
-                      <label
-                        htmlFor="facilityName"
-                        className="block font-heading font-semibold text-navy text-sm mb-2"
-                      >
-                        Facility Name *
-                      </label>
-                      <input
-                        type="text"
-                        id="facilityName"
-                        name="facilityName"
-                        required
-                        className="w-full border border-light-gray rounded-xl px-4 py-3 font-body text-dark focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="licenseType"
-                        className="block font-heading font-semibold text-navy text-sm mb-2"
-                      >
-                        License Type
-                      </label>
-                      <select
-                        id="licenseType"
-                        name="licenseType"
-                        className="w-full border border-light-gray rounded-xl px-4 py-3 font-body text-dark focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent bg-white"
-                      >
-                        <option value="">Select...</option>
-                        <option value="group">Group Child Care (DCF 250)</option>
-                        <option value="family">Family Child Care (DCF 251)</option>
-                        <option value="other">Other</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="enrolledChildren"
-                        className="block font-heading font-semibold text-navy text-sm mb-2"
-                      >
-                        Approximate Number of Children Needing Transportation
-                      </label>
-                      <input
-                        type="number"
-                        id="enrolledChildren"
-                        name="enrolledChildren"
-                        min="1"
-                        className="w-full border border-light-gray rounded-xl px-4 py-3 font-body text-dark focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent"
-                      />
-                    </div>
-                  </>
-                )}
-
-                <div>
-                  <label
-                    htmlFor="message"
-                    className="block font-heading font-semibold text-navy text-sm mb-2"
-                  >
-                    Tell Us More
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    rows={4}
-                    className="w-full border border-light-gray rounded-xl px-4 py-3 font-body text-dark focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent resize-none"
-                    placeholder={
-                      formType === "family"
-                        ? "Any details about your transportation needs..."
-                        : "Tell us about your facility and transportation challenges..."
-                    }
-                  />
-                </div>
-
-                {status === "error" && (
-                  <p className="text-red-600 font-body text-sm text-center">
-                    {errorMsg}
-                  </p>
-                )}
-
                 <button
-                  type="submit"
-                  disabled={status === "submitting"}
-                  className="w-full bg-orange text-white py-4 rounded-full font-heading font-bold text-lg hover:bg-orange/90 transition-all hover:-translate-y-0.5 shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                  type="button"
+                  onClick={() => {
+                    setAudience(null);
+                    setStatus("idle");
+                    setErrorMsg("");
+                  }}
+                  className="mb-6 inline-flex items-center gap-1.5 font-heading font-semibold text-sm text-dark/60 hover:text-orange transition-colors"
                 >
-                  {status === "submitting"
-                    ? "Sending..."
-                    : formType === "family"
-                      ? "Submit Family Inquiry"
-                      : "Submit Partnership Inquiry"}
+                  <span aria-hidden>&larr;</span> Choose a different option
                 </button>
-              </div>
-            </form>
+
+                <form
+                  onSubmit={handleSubmit}
+                  className="bg-white rounded-2xl p-8 md:p-10 shadow-sm relative overflow-hidden"
+                >
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-teal via-orange to-teal" />
+
+                  <h2 className="font-heading text-2xl font-extrabold text-navy mb-2">
+                    {isFamily
+                      ? "Family Transportation Inquiry"
+                      : "Facility Partnership Inquiry"}
+                  </h2>
+                  <p className="text-dark/60 font-body text-sm mb-8">
+                    {isFamily
+                      ? "Tell us about your child's transportation needs. We'll reach out within 1 business day."
+                      : "Tell us about your facility. We'll schedule a conversation to discuss partnership."}
+                  </p>
+
+                  <div className="space-y-6">
+                    <div className="grid sm:grid-cols-2 gap-6">
+                      <TextField
+                        id="firstName"
+                        label={isFamily ? "First Name" : "Contact First Name"}
+                      />
+                      <TextField
+                        id="lastName"
+                        label={isFamily ? "Last Name" : "Contact Last Name"}
+                      />
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 gap-6">
+                      <TextField id="email" label="Email Address" type="email" />
+                      <TextField id="phone" label="Phone Number" type="tel" />
+                    </div>
+
+                    {isFamily ? (
+                      <>
+                        <TextField
+                          id="numberOfChildren"
+                          label="Number of Children"
+                          type="number"
+                          min="1"
+                        />
+                        <TextField
+                          id="childcareFacility"
+                          label="Childcare Facility Name"
+                          placeholder="Where does your child attend?"
+                        />
+                        <TextField
+                          id="homeAddress"
+                          label="Child's Home Address (Pickup)"
+                          placeholder="Street address, city, ZIP"
+                        />
+                        <TextField
+                          id="childcareFacilityAddress"
+                          label="Childcare Facility Address (Drop-off)"
+                          placeholder="Street address, city, ZIP"
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <TextField id="facilityName" label="Facility Name" />
+                        <TextField
+                          id="facilityAddress"
+                          label="Facility Address"
+                          placeholder="Street address, city, ZIP"
+                        />
+                        <div>
+                          <label htmlFor="licenseType" className={labelClass}>
+                            License Type *
+                          </label>
+                          <select
+                            id="licenseType"
+                            name="licenseType"
+                            required
+                            className={`${inputClass} bg-white`}
+                          >
+                            <option value="">Select...</option>
+                            <option value="Group Child Care (DCF 250)">
+                              Group Child Care (DCF 250)
+                            </option>
+                            <option value="Family Child Care (DCF 251)">
+                              Family Child Care (DCF 251)
+                            </option>
+                            <option value="Other">Other</option>
+                          </select>
+                        </div>
+                        <TextField
+                          id="enrolledChildren"
+                          label="Number of Children Needing Transportation"
+                          type="number"
+                          min="1"
+                        />
+                      </>
+                    )}
+
+                    <div>
+                      <label htmlFor="message" className={labelClass}>
+                        Additional Details{isFamily ? " *" : ""}
+                      </label>
+                      <textarea
+                        id="message"
+                        name="message"
+                        rows={4}
+                        required={isFamily}
+                        className={`${inputClass} resize-none`}
+                        placeholder={
+                          isFamily
+                            ? "Schedule, timing, or anything else we should know..."
+                            : "Tell us about your facility and transportation challenges..."
+                        }
+                      />
+                    </div>
+
+                    {status === "error" && (
+                      <p className="text-red-600 font-body text-sm text-center">
+                        {errorMsg}
+                      </p>
+                    )}
+
+                    <button
+                      type="submit"
+                      disabled={status === "submitting"}
+                      className="w-full bg-orange text-white py-4 rounded-full font-heading font-bold text-lg hover:bg-orange/90 transition-all hover:-translate-y-0.5 shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                    >
+                      {status === "submitting"
+                        ? "Sending..."
+                        : isFamily
+                          ? "Submit Family Inquiry"
+                          : "Submit Partnership Inquiry"}
+                    </button>
+                  </div>
+                </form>
               </>
             )}
           </div>

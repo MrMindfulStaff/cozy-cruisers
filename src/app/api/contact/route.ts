@@ -43,10 +43,15 @@ export async function POST(request: Request) {
   ];
 
   if (isFamily) {
+    lines.push(`Number of children: ${(data.numberOfChildren ?? "").trim() || "—"}`);
     lines.push(`Childcare facility: ${(data.childcareFacility ?? "").trim() || "—"}`);
-    lines.push(`Pickup area: ${(data.pickupArea ?? "").trim() || "—"}`);
+    lines.push(`Pickup — child's home address: ${(data.homeAddress ?? "").trim() || "—"}`);
+    lines.push(
+      `Drop-off — childcare facility address: ${(data.childcareFacilityAddress ?? "").trim() || "—"}`
+    );
   } else {
     lines.push(`Facility name: ${(data.facilityName ?? "").trim() || "—"}`);
+    lines.push(`Facility address: ${(data.facilityAddress ?? "").trim() || "—"}`);
     lines.push(`License type: ${(data.licenseType ?? "").trim() || "—"}`);
     lines.push(`Children needing transportation: ${(data.enrolledChildren ?? "").trim() || "—"}`);
   }
