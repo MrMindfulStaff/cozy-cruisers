@@ -60,12 +60,12 @@ export default function Home() {
                 child accounted for.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <a
-                  href="mailto:CozyCruiserMKE@gmail.com"
+                <Link
+                  href="/contact"
                   className="bg-orange text-white px-8 py-4 rounded-full font-heading font-bold text-lg text-center hover:bg-orange/90 transition-colors shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
                 >
                   Get Started
-                </a>
+                </Link>
                 <Link
                   href="/facilities"
                   className="border-2 border-teal text-teal px-8 py-4 rounded-full font-heading font-bold text-lg text-center hover:bg-teal/10 transition-colors"

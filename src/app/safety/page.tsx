@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import {
   WaveDivider,
   WaveDividerAlt,
@@ -235,12 +236,12 @@ export default function SafetyPage() {
           <p className="text-white/70 font-body mb-8 max-w-xl mx-auto">
             Have questions about our safety standards? We&apos;re happy to walk you through everything.
           </p>
-          <a
-            href="mailto:CozyCruiserMKE@gmail.com"
+          <Link
+            href="/contact"
             className="inline-block bg-orange text-white px-8 py-4 rounded-full font-heading font-bold text-lg hover:bg-orange/90 transition-all hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
           >
             Contact Us
-          </a>
+          </Link>
         </div>
       </section>
     </>

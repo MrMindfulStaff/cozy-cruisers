@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import {
   WaveDivider,
   WaveDividerAlt,
@@ -31,12 +32,12 @@ export default function FacilitiesPage() {
               transportation arm — licensed, insured, and built to the same compliance standard
               you hold yourself to.
             </p>
-            <a
-              href="mailto:CozyCruiserMKE@gmail.com"
+            <Link
+              href="/contact"
               className="inline-block bg-orange text-white px-8 py-4 rounded-full font-heading font-bold text-lg hover:bg-orange/90 transition-all hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
             >
               Partner With Us
-            </a>
+            </Link>
           </div>
         </div>
         <WaveDivider color="#FAF7F2" />
@@ -212,12 +213,12 @@ export default function FacilitiesPage() {
               requirements, route parameters, emergency procedures, and mutual accountability.
               No surprises, no gray areas.
             </p>
-            <a
-              href="mailto:CozyCruiserMKE@gmail.com"
+            <Link
+              href="/contact"
               className="inline-block bg-orange text-white px-8 py-4 rounded-full font-heading font-bold text-lg hover:bg-orange/90 transition-all hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
             >
               Request a Service Agreement
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -233,12 +234,12 @@ export default function FacilitiesPage() {
           <p className="text-white/70 font-body mb-8 max-w-xl mx-auto">
             We&apos;re your transportation department. Fully compliant. Fully accountable.
           </p>
-          <a
-            href="mailto:CozyCruiserMKE@gmail.com"
+          <Link
+            href="/contact"
             className="inline-block bg-orange text-white px-8 py-4 rounded-full font-heading font-bold text-lg hover:bg-orange/90 transition-all hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
           >
             Start a Partnership
-          </a>
+          </Link>
         </div>
       </section>
     </>
