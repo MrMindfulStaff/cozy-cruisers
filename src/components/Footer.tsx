@@ -60,10 +60,10 @@ export default function Footer() {
               <li>Milwaukee, Wisconsin</li>
               <li>
                 <a
-                  href="mailto:info@cozycruisers.com"
+                  href="mailto:CozyCruiserMKE@gmail.com"
                   className="hover:text-white transition-colors"
                 >
-                  info@cozycruisers.com
+                  CozyCruiserMKE@gmail.com
                 </a>
               </li>
               <li>

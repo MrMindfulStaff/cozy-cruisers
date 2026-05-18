@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import Image from "next/image";
 import {
   WaveDivider,
@@ -205,12 +204,12 @@ export default function AboutPage() {
           <p className="text-white/70 font-body mb-8">
             We&apos;re not an app. We&apos;re your community.
           </p>
-          <Link
-            href="/contact"
+          <a
+            href="mailto:CozyCruiserMKE@gmail.com"
             className="inline-block bg-orange text-white px-8 py-4 rounded-full font-heading font-bold text-lg hover:bg-orange/90 transition-all hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
           >
             Get in Touch
-          </Link>
+          </a>
         </div>
       </section>
     </>

@@ -295,8 +295,8 @@ export default function ContactPage() {
                 </svg>
               </div>
               <h3 className="font-heading font-bold text-navy mb-1">Email</h3>
-              <a href="mailto:info@cozycruisers.com" className="text-dark/70 font-body hover:text-orange transition-colors">
-                info@cozycruisers.com
+              <a href="mailto:CozyCruiserMKE@gmail.com" className="text-dark/70 font-body hover:text-orange transition-colors">
+                CozyCruiserMKE@gmail.com
               </a>
             </div>
             <div className="card-lift bg-cream/50 rounded-2xl p-8">

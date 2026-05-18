@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import {
   WaveDivider,
   WaveDividerAlt,
@@ -32,12 +31,12 @@ export default function FamiliesPage() {
               Cozy Cruisers provides scheduled daily transportation to and from licensed childcare
               facilities in Milwaukee.
             </p>
-            <Link
-              href="/contact"
+            <a
+              href="mailto:CozyCruiserMKE@gmail.com"
               className="inline-block bg-orange text-white px-8 py-4 rounded-full font-heading font-bold text-lg hover:bg-orange/90 transition-all hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
             >
               Enroll Your Child
-            </Link>
+            </a>
           </div>
         </div>
         <WaveDivider color="#FAF7F2" />
@@ -214,12 +213,12 @@ export default function FamiliesPage() {
           <p className="text-white/70 font-body mb-8 max-w-xl mx-auto">
             Certified. Trained. Trusted. Every mile.
           </p>
-          <Link
-            href="/contact"
+          <a
+            href="mailto:CozyCruiserMKE@gmail.com"
             className="inline-block bg-orange text-white px-8 py-4 rounded-full font-heading font-bold text-lg hover:bg-orange/90 transition-all hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
           >
             Enroll Your Child Today
-          </Link>
+          </a>
         </div>
       </section>
     </>
