@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import {
   FloatingShapes,
   WaveDivider,
@@ -13,6 +13,41 @@ import {
 
 export default function ContactPage() {
   const [formType, setFormType] = useState<"family" | "facility">("family");
+  const [status, setStatus] = useState<
+    "idle" | "submitting" | "success" | "error"
+  >("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setStatus("submitting");
+    setErrorMsg("");
+
+    const payload = Object.fromEntries(new FormData(e.currentTarget).entries());
+    payload.formType = formType;
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        setErrorMsg(body.error || "Something went wrong. Please try again.");
+        setStatus("error");
+        return;
+      }
+
+      setStatus("success");
+    } catch {
+      setErrorMsg(
+        "Network error. Please check your connection and try again."
+      );
+      setStatus("error");
+    }
+  }
 
   return (
     <>
@@ -42,6 +77,23 @@ export default function ContactPage() {
         <BlobAccent position="bottom-left" color="orange" size="md" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto">
+            {status === "success" ? (
+              <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm text-center relative overflow-hidden">
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-teal via-orange to-teal" />
+                <div className="w-16 h-16 bg-teal/10 text-teal rounded-full flex items-center justify-center mx-auto mb-5">
+                  <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                  </svg>
+                </div>
+                <h2 className="font-heading text-2xl font-extrabold text-navy mb-2">
+                  Thank you — message received!
+                </h2>
+                <p className="text-dark/60 font-body">
+                  We&apos;ll reach out within 1 business day.
+                </p>
+              </div>
+            ) : (
+              <>
             {/* Toggle */}
             <div className="flex bg-white rounded-full p-1 shadow-sm mb-10 max-w-md mx-auto">
               <button
@@ -68,17 +120,10 @@ export default function ContactPage() {
 
             {/* Form */}
             <form
-              name={formType === "family" ? "family-inquiry" : "facility-inquiry"}
-              method="POST"
-              data-netlify="true"
+              onSubmit={handleSubmit}
               className="bg-white rounded-2xl p-8 md:p-10 shadow-sm relative overflow-hidden"
             >
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-teal via-orange to-teal" />
-              <input
-                type="hidden"
-                name="form-name"
-                value={formType === "family" ? "family-inquiry" : "facility-inquiry"}
-              />
 
               <h2 className="font-heading text-2xl font-extrabold text-navy mb-2">
                 {formType === "family" ? "Family Inquiry" : "Facility Partnership Inquiry"}
@@ -260,14 +305,27 @@ export default function ContactPage() {
                   />
                 </div>
 
+                {status === "error" && (
+                  <p className="text-red-600 font-body text-sm text-center">
+                    {errorMsg}
+                  </p>
+                )}
+
                 <button
                   type="submit"
-                  className="w-full bg-orange text-white py-4 rounded-full font-heading font-bold text-lg hover:bg-orange/90 transition-all hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
+                  disabled={status === "submitting"}
+                  className="w-full bg-orange text-white py-4 rounded-full font-heading font-bold text-lg hover:bg-orange/90 transition-all hover:-translate-y-0.5 shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                 >
-                  {formType === "family" ? "Submit Family Inquiry" : "Submit Partnership Inquiry"}
+                  {status === "submitting"
+                    ? "Sending..."
+                    : formType === "family"
+                      ? "Submit Family Inquiry"
+                      : "Submit Partnership Inquiry"}
                 </button>
               </div>
             </form>
+              </>
+            )}
           </div>
         </div>
       </section>
